@@ -2,37 +2,36 @@
 #include <stdlib.h>
 #define TAM 10  // Tamanho do tabuleiro
 
-// Função para imprimir o tabuleiro
 void imprimirTabuleiro(char tab[TAM][TAM]) {
-    int i, j; // Declarar as variáveis fora do loop
-    for (i = 0; i < TAM; i++) {
-        for (j = 0; j < TAM; j++) {
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
             printf("%c ", tab[i][j]);
         }
         printf("\n");
     }
 }
 
-// Função para mover o jogador
 void moverJogador(char tab[TAM][TAM], int *px, int *py, char direcao) {
     int dx = 0, dy = 0;
     switch (direcao) {
-        case 'W': dx = -1; break; // Cima
-        case 'S': dx = 1; break;  // Baixo
-        case 'A': dy = -1; break; // Esquerda
-        case 'D': dy = 1; break;  // Direita
+        case 'W': dx = -1; break;
+        case 'S': dx = 1; break;
+        case 'A': dy = -1; break;
+        case 'D': dy = 1; break;
     }
 
-    int novo_x = *px + dx, novo_y = *py + dy;
-    if (novo_x >= 0 && novo_x < TAM && novo_y >= 0 && novo_y < TAM && tab[novo_x][novo_y] != '*') {
-        tab[*px][*py] = ' ';  // Limpa a posição antiga
-        *px = novo_x;
-        *py = novo_y;
-        tab[*px][*py] = '&';  // Move o jogador para a nova posição
+    int novo_x = *px + dx;
+    int novo_y = *py + dy;
+    if (novo_x >= 0 && novo_x < TAM && novo_y >= 0 && novo_y < TAM) {
+        if (tab[novo_x][novo_y] != '*') {
+            tab[*px][*py] = ' ';
+            *px = novo_x;
+            *py = novo_y;
+            tab[*px][*py] = '&';
+        }
     }
 }
 
-// Função principal da Fase 1
 void fase1() {
     char tabuleiro[TAM][TAM] = {
         {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
@@ -47,17 +46,16 @@ void fase1() {
         {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'}
     };
     
-    int px = 1, py = 1;  // Posição inicial do jogador
-    
+    int px = 1, py = 1;
     imprimirTabuleiro(tabuleiro);
-    
     char comando;
     printf("Use as teclas W, A, S, D para se mover. A tecla 'I' serve para interagir.\n");
     while (1) {
         printf("Digite o seu comando: ");
         scanf(" %c", &comando);
+        system("cls"); // Limpa a tela antes de imprimir novamente o tabuleiro
         if (comando == 'I') {
-            // Implementar interação (abrir porta, pegar chave, etc.)
+            // Implementação da interação aqui
         } else {
             moverJogador(tabuleiro, &px, &py, comando);
             imprimirTabuleiro(tabuleiro);
@@ -65,15 +63,10 @@ void fase1() {
     }
 }
 
-// Execução das funções do jogo
 int main() {
     int opcao;
-
     while (1) {
-        // Limpar a tela. No Windows, use "cls", no Linux ou MacOS, use "clear"
         system("cls");
-
-        // Exibir o menu principal
         printf("Bem-vindo ao Jogo de Aventura Dunger Crawler'!\n\n");
         printf("Menu Principal:\n");
         printf("1. Jogar\n");
@@ -89,7 +82,7 @@ int main() {
                 break;
             case 2:
                 printf("\nTutorial:\n");
-                printf("As teclas W, A, S, D para mover o jogador(&) para: CIMA,ESQUERDA,BAIXO E DIREITA\n A Tecla 'I' serve para interagir com a chave (@).\nUse suas habilidades para resolver os desafios e progredir!\n");
+                printf("As teclas W, A, S, D movem o jogador (&). 'I' para interagir.\n");
                 system("pause");
                 break;
             case 3:
@@ -101,7 +94,6 @@ int main() {
                 break;
         }
     }
-
     return 0;
 }
 
