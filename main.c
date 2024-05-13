@@ -4,6 +4,7 @@
 
 #define TAMANHO_MAPA 10
 #define TAMANHO_MAPA2 20
+#define TAMANHO_MAPA3 40
 #define NUM_OBSTACULOS 50
 
 int ehObstaculo(int x, int y, int obstaculosX[], int obstaculosY[], int numObstaculos);
@@ -226,10 +227,12 @@ void fase2() {
             	if (posJogadorX == posX && posJogadorY == posY) {
 			        printf("Voce foi pego pelo X! Reiniciando a fase...\n");
 			        // Redefinir as posições iniciais do jogador e do 'X'
+			        mapa[posX][posY] = ' '; // Remover o 'X' da posição anterior
 			        posJogadorX = 1;
 			        posJogadorY = 1;
 			        posX = 1;
 			        posY = 18;
+			        mapa[1] [18] = 'X' ;
 			        // Outras redefinições necessárias...
 			        continue; // Continuar para a próxima iteração do loop
 			    }
@@ -373,8 +376,10 @@ void fase2() {
 			        // Redefinir as posições iniciais do jogador e do 'X'
 			        posJogadorX = 1;
 			        posJogadorY = 1;
+			        mapa[posX][posY] = ' ' ;
 			        posX = 1;
 			        posY = 18;
+			        mapa [1] [18] = 'X' ;
 			        // Outras redefinições necessárias...
 			    }
 
@@ -390,6 +395,8 @@ void fase2() {
 			    }
             }
         } 
+
+
 
 
 int main() {
