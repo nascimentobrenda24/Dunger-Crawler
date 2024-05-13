@@ -1,0 +1,229 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define TAMANHO_MAPA 10
+#define TAMANHO_MAPA2 20
+#define NUM_OBSTACULOS 14
+
+// Protótipo da função ehObstaculo
+int ehObstaculo(int x, int y, int obstaculosX[], int obstaculosY[], int numObstaculos);
+
+// Função para verificar se uma posição está dentro dos limites do mapa
+int dentroLimites(int x, int y) {
+    return x >= 1 && x < TAMANHO_MAPA - 1 && y >= 1 && y < TAMANHO_MAPA - 1;
+}
+
+// Função para verificar se uma posição contém um obstáculo
+int ehObstaculo(int x, int y, int obstaculosX[], int obstaculosY[], int numObstaculos) {
+    for (int i = 0; i < numObstaculos; i++) {
+        if (x == obstaculosX[i] && y == obstaculosY[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int main() {
+    srand(time(NULL)); // Inicializar a semente do gerador de números aleatórios com o tempo atual
+
+    int escolha;
+
+    do {
+        // Menu inicial
+        printf("Menu:\n");
+        printf("1. Iniciar jogo no Mapa 1\n");
+        printf("2. Iniciar jogo no Mapa 2\n");
+        printf("3. Tutorial\n");
+        printf("4. Encerrar programa\n");
+        printf("Escolha: ");
+        scanf("%d", &escolha);
+
+        if (escolha == 1) {
+            // Criar matriz para representar o mapa
+            char mapa[TAMANHO_MAPA][TAMANHO_MAPA];
+
+            // Inicializar o mapa com espaços em branco
+            for (int i = 0; i < TAMANHO_MAPA; i++) {
+                for (int j = 0; j < TAMANHO_MAPA; j++) {
+                    mapa[i][j] = ' ';
+                }
+            }
+
+            // Preencher as bordas com asteriscos
+            for (int i = 0; i < TAMANHO_MAPA; i++) {
+                for (int j = 0; j < TAMANHO_MAPA; j++) {
+                    if (i == 0 || i == TAMANHO_MAPA - 1 || j == 0 || j == TAMANHO_MAPA - 1) {
+                        mapa[i][j] = '*';
+                    }
+                }
+            }
+
+            // Definir a posição dos obstáculos
+            int obstaculosX[NUM_OBSTACULOS] = {1, 3, 4, 5, 5, 5, 7, 8, 8, 7, 2, 4, 3, 3}; // Posições em X
+            int obstaculosY[NUM_OBSTACULOS] = {2, 4, 4, 2, 3, 7, 8, 5, 2, 2, 8, 7, 5, 6}; // Posições em Y
+
+            // Preencher o mapa com os obstáculos "*"
+            for (int i = 0; i < NUM_OBSTACULOS; i++) {
+                mapa[obstaculosX[i]][obstaculosY[i]] = '*';
+            }
+
+            // Definir a posição inicial do caractere "&"
+            int posX = 1; // Escolha a posição inicial em X
+            int posY = 1; // Escolha a posição inicial em Y
+            mapa[8][1] = 'X';
+            mapa[8][8] = '@';
+            mapa[5][5] = 'D';
+            int posAnteriorX = 8;
+            int posAnteriorY = 1;
+            int passouPorAt = 0; // Variável para controlar se passou pelo '@'
+            int venceu = 0; // Variável para controlar se o jogador venceu
+
+            // Loop principal para mover o personagem "&"
+            char movimento;
+
+            while (!venceu) {
+                // Atualizar a posição do personagem no mapa
+                mapa[posX][posY] = '&';
+
+                // Imprimir o mapa atualizado
+                system("cls"); // Limpar a tela (Windows)
+                printf("Mapa:\n");
+                for (int i = 0; i < TAMANHO_MAPA; i++) {
+                    for (int j = 0; j < TAMANHO_MAPA; j++) {
+                        printf("%c ", mapa[i][j]);
+                    }
+                    printf("\n");
+                }
+
+                // Capturar o movimento do usuário
+                scanf(" %c", &movimento);
+                int novaPosX = posX;
+                int novaPosY = posY;
+                if (movimento == 'd' && posY < TAMANHO_MAPA - 2) {
+                    novaPosY++;
+                } else if (movimento == 'a' && posY > 1) {
+                    novaPosY--;
+                } else if (movimento == 'w' && posX > 1) {
+                    novaPosX--;
+                } else if (movimento == 's' && posX < TAMANHO_MAPA - 2) {
+                    novaPosX++;
+                }
+
+                // Verificar se a nova posição colide com os obstáculos "*" ou com o caractere "D"
+                if ((mapa[novaPosX][novaPosY] == 'D' || (mapa[novaPosX][novaPosY] == '=' && passouPorAt == 0)) || ehObstaculo(novaPosX, novaPosY, obstaculosX, obstaculosY, NUM_OBSTACULOS)) {
+                    printf("Você encontrou um obstáculo! Tente outra direção.\n");
+                    novaPosX = posX; // Mantém a posição atual
+                    novaPosY = posY;
+                }
+
+                // Limpar a posição anterior do personagem no mapa
+                mapa[posX][posY] = ' ';
+
+                // Atualizar a posição do personagem
+                posX = novaPosX;
+                posY = novaPosY;
+
+                // Verificar se o caractere "&" passou pelo caractere "@"
+                if (!passouPorAt && mapa[posX][posY] == '@') {
+                    printf("Voce passou pelo caractere @! Pressione 'i' para alterar o caractere D para =.\n");
+                    passouPorAt = 1; // Marcando que passou pelo '@'
+                }
+
+                // Verificar se o caractere "&" encontrou o caractere "="
+                if (mapa[posX][posY] == '=' && passouPorAt) {
+                    printf("Voce venceu!\n");
+                    venceu = 1; // O jogador venceu
+                    break;
+                }
+
+                // Verificar se o caractere "&" encontrou o caractere "X"
+                if (posX == posAnteriorX && posY == posAnteriorY) {
+                    printf("Voce encontrou o caractere X! Fim do jogo.\n");
+                    system("pause") ;
+                    system("cls") ;
+                    break; // Finalizar o loop
+                }
+
+                // Verificar se o usuário pressionou 'i' e trocar o caractere "D" por "="
+                if (movimento == 'i' && passouPorAt) {
+                    // Verificar se o personagem "&" está adjacente ao caractere "D" (nas posições 5,4 5,6 4,5 6,5)
+                    if ((posX == 5 && (posY == 4 || posY == 6)) || ((posX == 4 || posX == 6) && posY == 5)) {
+                        mapa[5][5] = '='; // Alterar o caractere D para =
+                    } else {
+                        printf("Voce so pode transformar o D em = quando estiver ao lado dele!\n");
+                        system("pause") ;
+                    }
+                }
+
+                // Movimento aleatório do caractere "X"
+                int deltaX, deltaY;
+                do {
+                    // Gerar um movimento aleatório para o "X"
+                    deltaX = rand() % 3 - 1; // -1, 0, 1
+                    deltaY = rand() % 3 - 1; // -1, 0, 1
+
+                    // Verificar se a nova posição colide com os obstáculos "*" ou com o caractere "D" ou "="
+                    if ((deltaX != 0 || deltaY != 0) && (mapa[posAnteriorX + deltaX][posAnteriorY + deltaY] == 'D' || mapa[posAnteriorX + deltaX][posAnteriorY + deltaY] == '=')) {
+                        deltaX = 0; // Resetar o movimento para não se mover
+                        deltaY = 0;
+                    }
+                } while (!dentroLimites(posAnteriorX + deltaX, posAnteriorY + deltaY) || ehObstaculo(posAnteriorX + deltaX, posAnteriorY + deltaY, obstaculosX, obstaculosY, NUM_OBSTACULOS));
+
+                // Atualizar a posição do caractere "X"
+                mapa[posAnteriorX][posAnteriorY] = ' ';
+                posAnteriorX += deltaX;
+                posAnteriorY += deltaY;
+                mapa[posAnteriorX][posAnteriorY] = 'X';
+            }
+            
+            
+        } else if (escolha == 2) {
+            // Criar matriz para representar o mapa
+            char mapa[TAMANHO_MAPA2][TAMANHO_MAPA2];
+
+            // Inicializar o mapa com espaços em branco
+            for (int i = 0; i < TAMANHO_MAPA2; i++) {
+                for (int j = 0; j < TAMANHO_MAPA2; j++) {
+                    mapa[i][j] = ' ';
+                }
+            }
+
+            // Preencher as bordas com asteriscos
+            for (int i = 0; i < TAMANHO_MAPA2; i++) {
+                for (int j = 0; j < TAMANHO_MAPA2; j++) {
+                    if (i == 0 || i == TAMANHO_MAPA2 - 1 || j == 0 || j == TAMANHO_MAPA2 - 1) {
+                        mapa[i][j] = '*';
+                    }
+                }
+            }
+            
+            // Exibir mapa
+            printf("Mapa 2:\n");
+            for (int i = 0; i < TAMANHO_MAPA2; i++) {
+                for (int j = 0; j < TAMANHO_MAPA2; j++) {
+                    printf("%c ", mapa[i][j]);
+                }
+                printf("\n");
+            }
+            
+        } else if (escolha == 3) {
+            // Tutorial
+            printf("=== Tutorial ===\n");
+            printf("Use as teclas 'w', 'a', 's', 'd' para mover o personagem '&'.\n");
+            printf("Pressione 'i' para abrir a porta após passar pelo @.\n");
+            printf("Evite o monstro e passe pela porta para vencer o jogo!\n");
+            printf("Pressione qualquer tecla para voltar ao menu.\n");
+            getchar(); // Limpar o buffer de entrada
+            getchar(); // Aguardar pressionar qualquer tecla para continuar
+            system("cls");
+        } else if (escolha == 4) {
+            printf("Encerrando o programa...\n");
+            break; // Finalizar o loop
+        } else {
+            printf("Escolha inválida! Por favor, escolha 1, 2, 3 ou 4.\n");
+        }
+    } while (1);
+
+    return 0;
+}
