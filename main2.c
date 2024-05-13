@@ -176,6 +176,7 @@ void fase1() {
         }
 
        if (posX == posAnteriorX && posY == posAnteriorY) {
+       		system("cls") ;
 		    printf("Foi ruinzao mano, game over\n");
 		    system("pause");
 		    system("cls");
@@ -271,7 +272,10 @@ void fase2() {
 
             while (1) {
             	if (posJogadorX == posX && posJogadorY == posY) {
+            		system("cla") ;
 			        printf("De novo KKKKKKKKKKKKKKKK ruinzao");
+			        system("pause") ;
+			        system("cls") ;
 			        // Redefinir as posições iniciais do jogador e do 'X'
 			        mapa[posX][posY] = ' '; // Remover o 'X' da posição anterior
 			        posJogadorX = 1;
@@ -373,7 +377,7 @@ void fase2() {
                     scanf("%d", &opcao);
                     if (opcao == 1) {
                     	system("cls") ;
-                        printf("Se f#deu KKKKKKKKKKKKKKKKKKKKK \n");
+                        printf("Foi sal em ti KKKKKKKKK \n");
                         system("pause") ;
                         system("cls") ;
                         return 0; // Encerrar o programa
@@ -573,8 +577,8 @@ int main() {
         	fase2();
         } else if (escolha == 3) {
         	fase3();
-		  }else if (escolha == 4) {
-            // Tutorial
+		}else if (escolha == 4) {
+        	// Tutorial
             printf("=== Tutorial ===\n");
             printf("Use as teclas 'w', 'a', 's', 'd' para mover o boneco.\n");
             printf("Use a tecla 'r' para reiniciar a fase 2 caso venha errada\n") ;
