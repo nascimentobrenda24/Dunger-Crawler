@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #define TAM 10  // Tamanho do tabuleiro
 
-// Função para imprimir o tabuleiro
+// Funï¿½ï¿½o para imprimir o tabuleiro
 void imprimirTabuleiro(char tab[TAM][TAM]) {
-    int i, j; // Declarar as variáveis fora do loop
-    for (i = 0; i < TAM; i++) {
+    int i, j; // Declarar os contadores
+    // Desenhando o tabuleiro: LaÃ§o for comeÃ§a quando i for 0 e incrementa um atÃ© quando i for menor que o Tamanho do tabuleiro
+    for (i = 0; i < TAM; i++) { 
         for (j = 0; j < TAM; j++) {
             printf("%c ", tab[i][j]);
         }
@@ -13,7 +14,8 @@ void imprimirTabuleiro(char tab[TAM][TAM]) {
     }
 }
 
-// Função para mover o jogador
+// Funï¿½ï¿½o para mover o jogador
+// Definindo a posiÃ§Ã£o
 void moverJogador(char tab[TAM][TAM], int *px, int *py, char direcao) {
     int dx = 0, dy = 0;
     switch (direcao) {
@@ -25,14 +27,14 @@ void moverJogador(char tab[TAM][TAM], int *px, int *py, char direcao) {
 
     int novo_x = *px + dx, novo_y = *py + dy;
     if (novo_x >= 0 && novo_x < TAM && novo_y >= 0 && novo_y < TAM && tab[novo_x][novo_y] != '*') {
-        tab[*px][*py] = ' ';  // Limpa a posição antiga
+        tab[*px][*py] = ' ';  // Limpa a posiï¿½ï¿½o antiga
         *px = novo_x;
         *py = novo_y;
-        tab[*px][*py] = '&';  // Move o jogador para a nova posição
+        tab[*px][*py] = '&';  // Move o jogador para a nova posiï¿½ï¿½o
     }
 }
 
-// Função principal da Fase 1
+// Funï¿½ï¿½o principal da Fase 1
 void fase1() {
     char tabuleiro[TAM][TAM] = {
         {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
@@ -47,7 +49,7 @@ void fase1() {
         {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'}
     };
     
-    int px = 1, py = 1;  // Posição inicial do jogador
+    int px = 1, py = 1;  // Posiï¿½ï¿½o inicial do jogador
     
     imprimirTabuleiro(tabuleiro);
     
@@ -57,7 +59,7 @@ void fase1() {
         printf("Digite o seu comando: ");
         scanf(" %c", &comando);
         if (comando == 'I') {
-            // Implementar interação (abrir porta, pegar chave, etc.)
+            // Implementar interaï¿½ï¿½o (abrir porta, pegar chave, etc.)
         } else {
             moverJogador(tabuleiro, &px, &py, comando);
             imprimirTabuleiro(tabuleiro);
@@ -65,7 +67,7 @@ void fase1() {
     }
 }
 
-// Execução das funções do jogo
+// Execuï¿½ï¿½o das funï¿½ï¿½es do jogo
 int main() {
     int opcao;
 
@@ -79,7 +81,7 @@ int main() {
         printf("1. Jogar\n");
         printf("2. Tutorial\n");
         printf("3. Sair\n\n");
-        printf("Escolha uma opção: ");
+        printf("Escolha uma opï¿½ï¿½o: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
@@ -96,7 +98,7 @@ int main() {
                 printf("\nSaindo do jogo...\n");
                 return 0;
             default:
-                printf("\nOpção inválida! Por favor, tente novamente.\n");
+                printf("\nOpï¿½ï¿½o invï¿½lida! Por favor, tente novamente.\n");
                 system("pause");
                 break;
         }
