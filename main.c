@@ -2,15 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-<<<<<<< HEAD
-// Fun??o para imprimir o tabuleiro
-void imprimirTabuleiro(char tab[TAM][TAM]) {
-    int i, j; // Declarar os contadores
-    // Desenhando o tabuleiro: Laço for começa quando i for 0 e incrementa um até quando i for menor que o Tamanho do tabuleiro
-    for (i = 0; i < TAM; i++) { 
-        for (j = 0; j < TAM; j++) {
-            printf("%c ", tab[i][j]);
-=======
 #define TAMANHO_MAPA 10
 #define TAMANHO_MAPA2 20
 #define TAMANHO_MAPA3 40
@@ -29,68 +20,11 @@ int ehObstaculo(int x, int y, int obstaculosX[], int obstaculosY[], int numObsta
     for (int i = 0; i < numObstaculos; i++) {
         if (x == obstaculosX[i] && y == obstaculosY[i]) {
             return 1;
->>>>>>> 45851e366bceb3de44eaa881ecdcfadafd668a5f
         }
     }
     return 0;
 }
 
-<<<<<<< HEAD
-// Fun??o para mover o jogador
-// Definindo a posição
-void moverJogador(char tab[TAM][TAM], int *px, int *py, char direcao) {
-    int dx = 0, dy = 0;
-    switch (direcao) {
-        case 'W': dx = -1; break; // Cima
-        case 'S': dx = 1; break;  // Baixo
-        case 'A': dy = -1; break; // Esquerda
-        case 'D': dy = 1; break;  // Direita
-    }
-
-    int novo_x = *px + dx, novo_y = *py + dy;
-    if (novo_x >= 0 && novo_x < TAM && novo_y >= 0 && novo_y < TAM && tab[novo_x][novo_y] != '*') {
-        tab[*px][*py] = ' ';  // Limpa a posi??o antiga
-        *px = novo_x;
-        *py = novo_y;
-        tab[*px][*py] = '&';  // Move o jogador para a nova posi??o
-    }
-}
-
-// Fun??o principal da Fase 1
-void fase1() {
-    char tabuleiro[TAM][TAM] = {
-        {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
-        {'*', '&', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'},
-        {'*', ' ', '*', '*', ' ', '*', '*', ' ', ' ', '*'},
-        {'*', ' ', '*', '*', ' ', ' ', ' ', ' ', ' ', '*'},
-        {'*', ' ', ' ', ' ', '*', '*', '*', ' ', ' ', '*'},
-        {'*', ' ', '*', ' ', ' ', ' ', ' ', '*', ' ', '*'},
-        {'*', ' ', '*', '*', '*', '@', '*', '*', ' ', '*'},
-        {'*', 'X', ' ', ' ', '*', 'D', '*', ' ', ' ', '*'},
-        {'*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'},
-        {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'}
-    };
-    
-    int px = 1, py = 1;  // Posi??o inicial do jogador
-    
-    imprimirTabuleiro(tabuleiro);
-    
-    char comando;
-    printf("Use as teclas W, A, S, D para se mover. A tecla 'I' serve para interagir.\n");
-    while (1) {
-        printf("Digite o seu comando: ");
-        scanf(" %c", &comando);
-        if (comando == 'I') {
-            // Implementar intera??o (abrir porta, pegar chave, etc.)
-        } else {
-            moverJogador(tabuleiro, &px, &py, comando);
-            imprimirTabuleiro(tabuleiro);
-        }
-    }
-}
-
-// Execu??o das fun??es do jogo
-=======
 void moverX(int *posX, int *posY, char mapa[][TAMANHO_MAPA]) { // Alteração aqui
     int deltaX, deltaY;
     do {
@@ -458,7 +392,7 @@ void fase2() {
                     contadorEspinho++; // Incrementar o contador de toques no espinho
                     if (contadorEspinho == 3) {
                         system("cls");
-                        printf("Tu eh tao pereba que conseguiu morrer 3 vezes, volta pro menu e reinicia colega");
+                        printf("Tu eh tao pereba que conseguiu morrer 3 vezes, volta pro menu e reinicia colega ");
                         system("pause");
                         system("cls");
                         break; // Sair do loop e voltar para o menu
@@ -484,7 +418,10 @@ void fase2() {
                 
                 // Verificar se o jogador e o 'X' estão na mesma posição
                 if (posJogadorX == posX && posJogadorY == posY) {
-                    printf("Burrao, game over\n");
+                	system("cls") ;
+                	printf("Burrao, game over\n");
+                	system("pause") ;
+					system("cls") ;
 			        // Redefinir as posições iniciais do jogador e do 'X'
 			        posJogadorX = 1;
 			        posJogadorY = 1;
@@ -612,44 +549,11 @@ void fase3() {
 
 
 
->>>>>>> 45851e366bceb3de44eaa881ecdcfadafd668a5f
 int main() {
     srand(time(NULL));
 
     int escolha;
 
-<<<<<<< HEAD
-    while (1) {
-        // Limpar a tela. No Windows, use "cls", no Linux ou MacOS, use "clear"
-        system("cls");
-
-        // Exibir o menu principal
-        printf("Bem-vindo ao Jogo de Aventura Dunger Crawler'!\n\n");
-        printf("Menu Principal:\n");
-        printf("1. Jogar\n");
-        printf("2. Tutorial\n");
-        printf("3. Sair\n\n");
-        printf("Escolha uma op??o: ");
-        scanf("%d", &opcao);
-
-        switch (opcao) {
-            case 1:
-                printf("\nIniciando o jogo...\n");
-                fase1();
-                break;
-            case 2:
-                printf("\nTutorial:\n");
-                printf("As teclas W, A, S, D para mover o jogador(&) para: CIMA,ESQUERDA,BAIXO E DIREITA\n A Tecla 'I' serve para interagir com a chave (@).\nUse suas habilidades para resolver os desafios e progredir!\n");
-                system("pause");
-                break;
-            case 3:
-                printf("\nSaindo do jogo...\n");
-                return 0;
-            default:
-                printf("\nOp??o inv?lida! Por favor, tente novamente.\n");
-                system("pause");
-                break;
-=======
     do {
         printf("Menu:\n");
         printf("1. Hablar no Mapa 1\n");
@@ -690,9 +594,8 @@ int main() {
             printf("Escolha invalida! Por favor, escolha 1, 2, 3 ou 4.\n");
             system("pause");
             system("cls");
->>>>>>> 45851e366bceb3de44eaa881ecdcfadafd668a5f
         }
-    }
+    } while (1);
 
     return 0;
 }
