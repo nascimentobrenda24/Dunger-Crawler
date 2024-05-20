@@ -1,29 +1,57 @@
-                                                          PROJETO DUNGEON CRAWLER
+#README: Dungeon Crawler
 
-  Integrantes: 
-  
-               Augusto Rodrigues
-               
-               Brenda Nascimento
-               
-               Fernando Mourão
+## Introdução
+"Dungeon Crawler" é um jogo de aventura e puzzle em que o jogador assume o papel do protagonista numa narrativa interativa impulsionada pela exploração e resolução de quebra-cabeças. Inspirado por clássicos do gênero como "Colossal Cave Adventure", este projeto é desenvolvido com o objetivo de aprimorar habilidades como resolução de problemas, raciocínio lógico algorítmico e competência interpessoal.
 
-                                                                 LORE:
+## Objetivo
+Este projeto visa desenvolver e consolidar conhecimentos adquiridos em programação e algoritmos, desafiando os alunos a aplicar essas habilidades na criação de um jogo estruturado em fases com crescente dificuldade.
 
-Era uma vez um jovem chamado Pedro Casseb, este estava em um dia tedioso pois tinha passado a tarde inteira mexendo em java, pobre coitado. Foi então que pra melhorar ainda mais sua vida o leão azulino conseguiu empatar em casa 0 a 0 com o Tombense KKKKKKKKKK, ri o narrador, que tá tão fumado quanto o rival.
+## Como Jogar
+O jogo consiste em três fases, cada uma com desafios únicos e elementos interativos. Os comandos básicos são:
+- **W:** Mover para cima
+- **A:** Mover para a esquerda
+- **S:** Mover para baixo
+- **D:** Mover para a direita
+- **I:** Interagir com objetos
 
-Como hoje não teve gol do Ribamar, ele resolveu desestressar sua noite brincando de fazer um joguinho de labirinto no DevC++, até que ele toma um sustão com a notificação do celular da Polyana Natasha, fazendo ele derrubar o café no pc. Como não era kit Xeon, PC tava de boa, entretanto, ele começou a fazer barulhos estranhos.
+### Elementos do Jogo
+- **&:** Jogador
+- **\*:** Parede (impassável)
+- **@:** Chave (abre a porta)
+- **D:** Porta fechada
+- **=:** Porta aberta
+- **O:** Botão (interativo)
+- **#:** Espinho (reinicia a fase)
+- **>:** Teletransporte
+- **X:** Monstro nível 1 (movimento aleatório)
+- **V:** Monstro nível 2 (segue o jogador)
 
-Foi então que o cara foi sugado (Lá ele) pelo próprio jogo que criou, agora ele precisa vencer sua própria criação para escapar.
+### Telas do Jogo
+- **Menu Principal:** Opções de Jogar, Tutorial e Sair.
+- **Tutorial:** Instruções de jogo.
+- **Fase 1-3:** Cada fase com desafios e layout próprios.
+- **Vitória:** Tela de sucesso ao completar todas as fases.
+- **Derrota:** Tela exibida após falhas repetidas.
 
-                                                               HOW TO PLAY:
+## Artefatos
+O projeto inclui:
+- O jogo funcional.
+- Um repositório no GitHub com o código-fonte e este README.
+- Uma apresentação e defesa do projeto em um seminário.
 
-Use as teclas 'w', 'a', 's', 'd' para mover o Pedrinho
+## Equipe de Desenvolvimento
+- **Augusto** - Desenvolvedor e efeitos
+- **Brenda** - Arquitetura e desenvolvimento
+- **Fernando** - Desenvolvedor e testes
 
-Use a tecla 'r' para reiniciar a fase 2 quando vier bugada
+## Avaliação
+O projeto será avaliado em três sprints:
+- **Primeira Sprint:** Entrega do menu inicial e uma versão beta do primeiro mapa.
+- **Segunda Sprint:** Finalização do primeiro mapa e entrega do segundo mapa.
+- **Terceira Sprint:** Completação e teste final do jogo com defesa perante professores.
 
-Pressione 'i' para abrir a porta quando tiver a chave
+## Suporte
+Para suporte técnico, dúvidas ou sugestões, por favor entre em contato através do email: brenda24070071@aluno.cesupa.br
 
-Te arranca do monstro e passa pela porta para vencer o game
+Agradecemos o interesse e esperamos que você desfrute de "Dungeon Crawler" enquanto desenvolve habilidades valiosas!
 
-Fica de olho no espinho colega, se tu tocar 3 vezes nele, sal em ti maninho                                                        
