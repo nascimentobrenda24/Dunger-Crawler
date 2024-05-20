@@ -6,11 +6,23 @@
 #define TAMANHO_MAPA2 20
 #define TAMANHO_MAPA3 40
 #define NUM_OBSTACULOS 50
-#define POSICAO_INICIAL_V_X 1
-#define POSICAO_INICIAL_V_Y 4
+#define NUM_OBSTACULOS_FASE3 250
+#define POSICAO_INICIAL_V_X 13
+#define POSICAO_INICIAL_V_Y 20
+
+int posEspinhoX3[NUM_OBSTACULOS_FASE3];
+int posEspinhoY3[NUM_OBSTACULOS_FASE3];
 
 
 int ehObstaculo(int x, int y, int obstaculosX[], int obstaculosY[], int numObstaculos);
+
+int ehPosicaoProibida(int x, int y) {
+    // Adicione todas as posiÃ§Ãµes proibidas aqui
+    if ((x == 4 && y == 6) || (x == 17 && y == 3) || (x == 1 && y == 18)) {
+        return 1;
+    }
+    return 0;
+}
 
 int dentroLimites(int x, int y, int tamanhoMapa) {
     return x >= 0 && x < tamanhoMapa && y >= 0 && y < tamanhoMapa;
@@ -25,7 +37,7 @@ int ehObstaculo(int x, int y, int obstaculosX[], int obstaculosY[], int numObsta
     return 0;
 }
 
-void moverX(int *posX, int *posY, char mapa[][TAMANHO_MAPA]) { // Alteração aqui
+void moverX(int *posX, int *posY, char mapa[][TAMANHO_MAPA]) { // AlteraÃ§Ã£o aqui
     int deltaX, deltaY;
     do {
         deltaX = rand() % 3 - 1;
@@ -38,12 +50,25 @@ void moverX(int *posX, int *posY, char mapa[][TAMANHO_MAPA]) { // Alteração aqui
     mapa[*posX][*posY] = 'X';
 }
 
-void moverX2(int *posX, int *posY, char mapa[][TAMANHO_MAPA2]) { // Alteração aqui
+void moverX2(int *posX, int *posY, char mapa[][TAMANHO_MAPA2]) { 
     int deltaX, deltaY;
     do {
         deltaX = rand() % 3 - 1;
         deltaY = rand() % 3 - 1;
     } while (!dentroLimites(*posX + deltaX, *posY + deltaY, TAMANHO_MAPA2) || mapa[*posX + deltaX][*posY + deltaY] == '*' || mapa[*posX + deltaX][*posY + deltaY] == '#' || mapa[*posX + deltaX][*posY + deltaY] == 'D' || mapa[*posX + deltaX][*posY + deltaY] == '@'|| mapa[*posX + deltaX][*posY + deltaY] == '=');
+
+    mapa[*posX][*posY] = ' ';
+    *posX += deltaX;
+    *posY += deltaY;
+    mapa[*posX][*posY] = 'X';
+}
+    
+void moverX3(int *posX, int *posY, char mapa[][TAMANHO_MAPA3]) { // AlteraÃ§Ã£o aqui
+    int deltaX, deltaY;
+    do {
+        deltaX = rand() % 3 - 1;
+        deltaY = rand() % 3 - 1;
+    } while (!dentroLimites(*posX + deltaX, *posY + deltaY, TAMANHO_MAPA3) || mapa[*posX + deltaX][*posY + deltaY] == '*' || mapa[*posX + deltaX][*posY + deltaY] == '#' ||  mapa[*posX + deltaX][*posY + deltaY] == 'V' ||  mapa[*posX + deltaX][*posY + deltaY] == '>'   || mapa[*posX + deltaX][*posY + deltaY] == 'D' || mapa[*posX + deltaX][*posY + deltaY] == '@'|| mapa[*posX + deltaX][*posY + deltaY] == '=' || mapa[*posX + deltaX][*posY + deltaY] == '<');
 
     mapa[*posX][*posY] = ' ';
     *posX += deltaX;
@@ -64,34 +89,70 @@ void moverAnd(int *posX, int *posY, char mapa[][TAMANHO_MAPA3], char movimento) 
         deltaY = 1;
     }
 
-    // Verificar se o próximo movimento é válido
-    if (dentroLimites(*posX + deltaX, *posY + deltaY, TAMANHO_MAPA3) && mapa[*posX + deltaX][*posY + deltaY] != '*') {
-        mapa[*posX][*posY] = ' '; // Limpar a posição atual
-        *posX += deltaX; // Atualizar a posição em X
-        *posY += deltaY; // Atualizar a posição em Y
-        mapa[*posX][*posY] = '&'; // Atualizar a posição no mapa
+    // Verificar se o prÃ³ximo movimento Ã© vÃ¡lido
+    if (dentroLimites(*posX + deltaX, *posY + deltaY, TAMANHO_MAPA3) && mapa[*posX + deltaX][*posY + deltaY] != '*' && mapa[*posX + deltaX][*posY + deltaY] != 'D') {
+        mapa[*posX][*posY] = ' '; // Limpar a posiÃ§Ã£o atual
+        *posX += deltaX; // Atualizar a posiÃ§Ã£o em X
+        *posY += deltaY; // Atualizar a posiÃ§Ã£o em Y
+        mapa[*posX][*posY] = '&'; // Atualizar a posiÃ§Ã£o no mapa
+    } else if (mapa[*posX + deltaX][*posY + deltaY] == '#') {
+        // Se a prÃ³xima posiÃ§Ã£o for um espinho, apenas retorne Ã  posiÃ§Ã£o inicial
+        *posX = POSICAO_INICIAL_V_X;
+        *posY = POSICAO_INICIAL_V_Y;
+        
+        
     }
 }
-void moverV(int* posVX, int* posVY, int posAndX, int posAndY, char mapa[TAMANHO_MAPA3][TAMANHO_MAPA3]) {
-    // Limpar a posição anterior do personagem 'V'
-    mapa[*posVX][*posVY] = ' ';
 
-    // Calcular o movimento do personagem 'V' em direção ao '&'
+void moverV(int* posVX, int* posVY, int posAndX, int posAndY, char mapa[TAMANHO_MAPA3][TAMANHO_MAPA3], int espinhosX[], int espinhosY[], int numEspinhos) {
+    int novaPosVX = *posVX;
+    int novaPosVY = *posVY;
     int movimentoX = (posAndX > *posVX) ? 1 : (posAndX < *posVX) ? -1 : 0;
     int movimentoY = (posAndY > *posVY) ? 1 : (posAndY < *posVY) ? -1 : 0;
 
-    // Verificar se a próxima posição é válida e não está ocupada
-    if (movimentoX != 0 && dentroLimites(*posVX + movimentoX, *posVY, TAMANHO_MAPA3) && mapa[*posVX + movimentoX][*posVY] != '*' && mapa[*posVX + movimentoX][*posVY] != 'X') {
-        // Atualizar a posição do personagem 'V' de acordo com o movimento na horizontal
-        *posVX += movimentoX;
-    } else if (movimentoY != 0 && dentroLimites(*posVX, *posVY + movimentoY, TAMANHO_MAPA3) && mapa[*posVX][*posVY + movimentoY] != '*' && mapa[*posVX][*posVY + movimentoY] != 'X') {
-        // Atualizar a posição do personagem 'V' de acordo com o movimento na vertical
-        *posVY += movimentoY;
+    // Primeiro tenta mover na direÃ§Ã£o X
+    if (movimentoX != 0 && dentroLimites(*posVX + movimentoX, *posVY, TAMANHO_MAPA3) && mapa[*posVX + movimentoX][*posVY] != '*' && mapa[*posVX + movimentoX][*posVY] != 'X' && mapa[*posVX + movimentoX][*posVY] != '<' && mapa[*posVX + movimentoX][*posVY] != 'O' && mapa[*posVX + movimentoX][*posVY] != 'D' && mapa[*posVX + movimentoX][*posVY] != '@' && mapa[*posVX + movimentoX][*posVY] != '=') {
+        novaPosVX += movimentoX;
+    } else if (movimentoY != 0 && dentroLimites(*posVX, *posVY + movimentoY, TAMANHO_MAPA3) && mapa[*posVX][*posVY + movimentoY] != '*' && mapa[*posVX][*posVY + movimentoY] != 'X' && mapa[*posVX + movimentoX][*posVY] != '<' && mapa[*posVX + movimentoX][*posVY] != 'O' && mapa[*posVX + movimentoX][*posVY] != 'D' && mapa[*posVX + movimentoX][*posVY] != '@' && mapa[*posVX + movimentoX][*posVY] != '=') {
+        novaPosVY += movimentoY;
+    } else {
+        // Se nÃ£o puder mover na direÃ§Ã£o principal, tenta mover em direÃ§Ãµes alternativas
+        if (movimentoX != 0 && dentroLimites(*posVX, *posVY + movimentoY, TAMANHO_MAPA3) && mapa[*posVX][*posVY + movimentoY] != '*' && mapa[*posVX][*posVY + movimentoY] != 'X' && mapa[*posVX + movimentoX][*posVY] != '<' && mapa[*posVX + movimentoX][*posVY] != 'O' && mapa[*posVX + movimentoX][*posVY] != 'D' && mapa[*posVX + movimentoX][*posVY] != '@' && mapa[*posVX + movimentoX][*posVY] != '=' ) {
+            novaPosVY += movimentoY;
+        } else if (movimentoY != 0 && dentroLimites(*posVX + movimentoX, *posVY, TAMANHO_MAPA3) && mapa[*posVX + movimentoX][*posVY] != '*' && mapa[*posVX + movimentoX][*posVY] != 'X' && mapa[*posVX + movimentoX][*posVY] != '<' && mapa[*posVX + movimentoX][*posVY] != 'O' && mapa[*posVX + movimentoX][*posVY] != 'D' && mapa[*posVX + movimentoX][*posVY] != '@' && mapa[*posVX + movimentoX][*posVY] != '=') {
+            novaPosVX += movimentoX;
+        }
+        if (mapa[*posVX + movimentoX][*posVY + movimentoY] == '<' || mapa[*posVX + movimentoX][*posVY + movimentoY] == 'D' || mapa[*posVX + movimentoX][*posVY + movimentoY] == '@' || mapa[*posVX + movimentoX][*posVY + movimentoY] == 'O' || mapa[*posVX + movimentoX][*posVY + movimentoY] == '=') {
+        // Se o prÃ³ximo movimento colidir com o portal, nÃ£o realiza o movimento
+        return;
+    }
     }
 
-    // Desenhar o personagem 'V' na nova posição
-    mapa[*posVX][*posVY] = 'V';
+    // Verifica colisÃ£o com espinhos
+    if (ehObstaculo(novaPosVX, novaPosVY, espinhosX, espinhosY, numEspinhos)) {
+        // Se houver colisÃ£o, tenta mover em outra direÃ§Ã£o
+
+        // Primeiro tenta mover na direÃ§Ã£o Y
+        if (movimentoY != 0 && dentroLimites(*posVX, *posVY + movimentoY, TAMANHO_MAPA3) && mapa[*posVX][*posVY + movimentoY] != '*' && mapa[*posVX][*posVY + movimentoY] != 'X' && mapa[*posVX + movimentoX][*posVY] != '<' && mapa[*posVX + movimentoX][*posVY] != 'O' && mapa[*posVX + movimentoX][*posVY] != 'D' && mapa[*posVX + movimentoX][*posVY] != '@' && mapa[*posVX + movimentoX][*posVY] != '=') {
+            novaPosVY += movimentoY;
+        } else if (movimentoX != 0 && dentroLimites(*posVX + movimentoX, *posVY, TAMANHO_MAPA3) && mapa[*posVX + movimentoX][*posVY] != '*' && mapa[*posVX + movimentoX][*posVY] != 'X' && mapa[*posVX + movimentoX][*posVY] != '<' && mapa[*posVX + movimentoX][*posVY] != 'O' && mapa[*posVX + movimentoX][*posVY] != 'D' && mapa[*posVX + movimentoX][*posVY] != '@' && mapa[*posVX + movimentoX][*posVY] != '=') {
+            novaPosVX += movimentoX;
+        }
+
+        // Se ainda houver colisÃ£o, informa e nÃ£o realiza o movimento
+        if (ehObstaculo(novaPosVX, novaPosVY, espinhosX, espinhosY, numEspinhos)) {
+            return;
+        }
+    }
+
+    mapa[*posVX][*posVY] = ' ';  // Limpa a posiÃ§Ã£o antiga
+    *posVX = novaPosVX;
+    *posVY = novaPosVY;
+    mapa[*posVX][*posVY] = 'V';  // Define a nova posiÃ§Ã£o
 }
+
+
+
 
 
 
@@ -179,12 +240,12 @@ void fase1() {
 		    printf("Foi ruinzao mano, game over\n");
 		    system("pause");
 		    system("cls");
-		    mapa[posX][posY] = ' '; // Remover o 'X' da posição anterior
+		    mapa[posX][posY] = ' '; // Remover o 'X' da posiÃ§Ã£o anterior
 		    posX = 1;
 		    posY = 1;
 		    posAnteriorX = 8;
 		    posAnteriorY = 1;
-		    mapa[8][1] = 'X'; // Resetar a posição do 'X' após o reinício da fase
+		    mapa[8][1] = 'X'; // Resetar a posiÃ§Ã£o do 'X' apÃ³s o reinÃ­cio da fase
 		    continue;
 		}	
 
@@ -197,14 +258,14 @@ void fase1() {
             }
         }
 
-        moverX(&posAnteriorX, &posAnteriorY, mapa); // Mover o 'X' após o movimento do jogador
-                                                     // Verificar se o jogador e o '&' estão na mesma posição
+        moverX(&posAnteriorX, &posAnteriorY, mapa); // Mover o 'X' apÃ³s o movimento do jogador
+                                                     // Verificar se o jogador e o '&' estÃ£o na mesma posiÃ§Ã£o
         if (posX == posAnteriorX && posY == posAnteriorY) {
             printf("Voce foi pego pelo &! Reiniciando a fase...\n");
-            // Redefinir as posições iniciais do jogador e do 'X'
+            // Redefinir as posiÃ§Ãµes iniciais do jogador e do 'X'
 
-            // Outras redefinições necessárias...
-            continue; // Continuar para a próxima iteração do loop
+            // Outras redefiniÃ§Ãµes necessÃ¡rias...
+            continue; // Continuar para a prÃ³xima iteraÃ§Ã£o do loop
         }
     }
 }
@@ -218,7 +279,7 @@ void fase2() {
     // Criar matriz para representar o mapa
             char mapa[TAMANHO_MAPA2][TAMANHO_MAPA2];
 
-            // Inicializar o mapa com espaços em branco
+            // Inicializar o mapa com espaÃ§os em branco
             for (int i = 0; i < TAMANHO_MAPA2; i++) {
                 for (int j = 0; j < TAMANHO_MAPA2; j++) {
                     mapa[i][j] = ' ';
@@ -241,29 +302,29 @@ void fase2() {
             mapa[8][18] = '*';
 
             // Adicionar os espinhos
-            int posEspinhoX[NUM_OBSTACULOS]; // Posições X dos espinhos
-            int posEspinhoY[NUM_OBSTACULOS]; // Posições Y dos espinhos
+            int posEspinhoX[NUM_OBSTACULOS]; // PosiÃ§Ãµes X dos espinhos
+            int posEspinhoY[NUM_OBSTACULOS]; // PosiÃ§Ãµes Y dos espinhos
 
             for (int i = 0; i < NUM_OBSTACULOS; i++) {
                 int x = rand() % (TAMANHO_MAPA2 - 2) + 1;
                 int y = rand() % (TAMANHO_MAPA2 - 2) + 1;
                 posEspinhoX[i] = x;
                 posEspinhoY[i] = y;
-                mapa[x][y] = '#'; // Adicionar espinho na posição (x, y)
+                mapa[x][y] = '#'; // Adicionar espinho na posiÃ§Ã£o (x, y)
             }
 
-            // Definir a posição inicial do jogador
-            int posJogadorX = 1; // Escolha a posição inicial em X
-            int posJogadorY = 1; // Escolha a posição inicial em Y
+            // Definir a posiÃ§Ã£o inicial do jogador
+            int posJogadorX = 1; // Escolha a posiÃ§Ã£o inicial em X
+            int posJogadorY = 1; // Escolha a posiÃ§Ã£o inicial em Y
 
-            // Definir a posição inicial do 'X'
-            int posX = 1; // Posição inicial em X do 'X'
-            int posY = 18; // Posição inicial em Y do 'X'
+            // Definir a posiÃ§Ã£o inicial do 'X'
+            int posX = 1; // PosiÃ§Ã£o inicial em X do 'X'
+            int posY = 18; // PosiÃ§Ã£o inicial em Y do 'X'
 
             // Contador de toques no espinho
             int contadorEspinho = 0;
 
-            // Variável para controlar se o jogador passou pelo caractere "@"
+            // VariÃ¡vel para controlar se o jogador passou pelo caractere "@"
             int passouPorAt = 0;
 
             // Loop principal para mover o jogador e o 'X'
@@ -272,15 +333,15 @@ void fase2() {
             while (1) {
             	if (posJogadorX == posX && posJogadorY == posY) {
 			        printf("De novo KKKKKKKKKKKKKKKK ruinzao");
-			        // Redefinir as posições iniciais do jogador e do 'X'
-			        mapa[posX][posY] = ' '; // Remover o 'X' da posição anterior
+			        // Redefinir as posiÃ§Ãµes iniciais do jogador e do 'X'
+			        mapa[posX][posY] = ' '; // Remover o 'X' da posiÃ§Ã£o anterior
 			        posJogadorX = 1;
 			        posJogadorY = 1;
 			        posX = 1;
 			        posY = 18;
 			        mapa[1] [18] = 'X' ;
-			        // Outras redefinições necessárias...
-			        continue; // Continuar para a próxima iteração do loop
+			        // Outras redefiniÃ§Ãµes necessÃ¡rias...
+			        continue; // Continuar para a prÃ³xima iteraÃ§Ã£o do loop
 			    }
             	
                 // Movimento do caractere 'X'
@@ -311,7 +372,7 @@ void fase2() {
 
                 // Verificar se o jogador pressionou "i" e se ele passou pelo caractere "@"
                 if (movimento == 'i' && passouPorAt) {
-                    // Verificar se o jogador está adjacente ao caractere "D" (nas posições 17,2 17,4 16,3 18,3)
+                    // Verificar se o jogador estÃ¡ adjacente ao caractere "D" (nas posiÃ§Ãµes 17,2 17,4 16,3 18,3)
                     if ((posJogadorX == 17 && (posJogadorY == 2 || posJogadorY == 4)) || ((posJogadorX == 16 || posJogadorX == 18) && posJogadorY == 3)) {
                         mapa[17][3] = '='; // Trocar o caractere "D" por "="
                     } else {
@@ -320,15 +381,17 @@ void fase2() {
                     }
                 }
 
-                // Atualizar a posição do jogador de acordo com o movimento
-                if (movimento == 'd' && posJogadorY < TAMANHO_MAPA2 - 2 && mapa[novaPosJogadorX][novaPosJogadorY + 1] != '*') {
-                    novaPosJogadorY++;
-                } else if (movimento == 'a' && posJogadorY > 1 && mapa[novaPosJogadorX][novaPosJogadorY - 1] != '*') {
-                    novaPosJogadorY--;
-                } else if (movimento == 'w' && posJogadorX > 1 && mapa[novaPosJogadorX - 1][novaPosJogadorY] != '*') {
-                    novaPosJogadorX--;
-                } else if (movimento == 's' && posJogadorX < TAMANHO_MAPA2 - 2 && mapa[novaPosJogadorX + 1][novaPosJogadorY] != '*') {
-                    novaPosJogadorX++;
+                // Atualizar a posiÃ§Ã£o do jogador de acordo com o movimento
+                if (movimento == 'd' && posJogadorY < TAMANHO_MAPA2 - 2 && mapa[novaPosJogadorX][novaPosJogadorY + 1] != '*' && mapa[novaPosJogadorX][novaPosJogadorY + 1] != 'D') {
+            		novaPosJogadorY++;
+		        } else if (movimento == 'a' && posJogadorY > 1 && mapa[novaPosJogadorX][novaPosJogadorY - 1] != '*' && mapa[novaPosJogadorX][novaPosJogadorY - 1] != 'D') {
+		            novaPosJogadorY--;
+		        } else if (movimento == 'w' && posJogadorX > 1 && mapa[novaPosJogadorX - 1][novaPosJogadorY] != '*' && mapa[novaPosJogadorX - 1][novaPosJogadorY] != 'D') {
+		            novaPosJogadorX--;
+		        } else if (movimento == 's' && posJogadorX < TAMANHO_MAPA2 - 2 && mapa[novaPosJogadorX + 1][novaPosJogadorY] != '*' && mapa[novaPosJogadorX + 1][novaPosJogadorY] != 'D') {
+		            novaPosJogadorX++;
+        
+            
                 } else if (movimento == 'r') {
                     // Reiniciar a fase
                     // Recriar o mapa
@@ -341,7 +404,7 @@ void fase2() {
                             }
                         }
                     }
-                    // Adicionar as paredes
+                    // Adicionar os caracteres
                     mapa[2][2] = '*';
                     mapa[5][5] = '*';
                     mapa[7][14] = '*';
@@ -352,21 +415,25 @@ void fase2() {
 
                     // Adicionar os espinhos
                     for (int i = 0; i < NUM_OBSTACULOS; i++) {
-                        int x = rand() % (TAMANHO_MAPA2 - 2) + 1;
-                        int y = rand() % (TAMANHO_MAPA2 - 2) + 1;
+                    	int x, y ;
+						do {
+                    		x = rand() % (TAMANHO_MAPA2 - 2) + 1;
+	                        y = rand() % (TAMANHO_MAPA2 - 2) + 1;
+	                        
+	                    }while(ehPosicaoProibida(x, y) || mapa[x][y] != ' '); // Verificar se a posiÃ§Ã£o Ã© proibida ou jÃ¡ estÃ¡ ocupada)
                         posEspinhoX[i] = x;
                         posEspinhoY[i] = y;
                         mapa[x][y] = '#';
                     }
-                    posJogadorX = 1; // Definir a posição inicial do jogador
+                    posJogadorX = 1; // Definir a posiÃ§Ã£o inicial do jogador
                     posJogadorY = 1;
                     contadorEspinho = 0; // Zerar o contador de toques no espinho
-                    posX = 1; // Definir a posição inicial do 'X'
-                    posY = 18; // Definir a posição inicial do 'X'
+                    posX = 1; // Definir a posiÃ§Ã£o inicial do 'X'
+                    posY = 18; // Definir a posiÃ§Ã£o inicial do 'X'
                     continue; // Reiniciar o loop para exibir o mapa atualizado
                 }
 
-                // Verificar se a nova posição coincide com o obstáculo "O"
+                // Verificar se a nova posiÃ§Ã£o coincide com o obstÃ¡culo "O"
                 if (novaPosJogadorX == 18 && novaPosJogadorY == 1) {
                     int opcao;
                     printf("Quer tocar no butao? (1 para sim, 2 para nao): ");
@@ -376,7 +443,7 @@ void fase2() {
                         printf("Se f#deu KKKKKKKKKKKKKKKKKKKKK \n");
                         system("pause") ;
                         system("cls") ;
-                        return 0; // Encerrar o programa
+                        exit(0); // Encerrar o programa
                         system("cls") ;
                     } else if (opcao == 2) {
                         // Continuar o jogo normalmente
@@ -385,79 +452,71 @@ void fase2() {
                     }
                 }
 
-                // Verificar se a nova posição colide com o espinho
+                // Verificar se a nova posiÃ§Ã£o colide com o espinho
                 if (ehObstaculo(novaPosJogadorX, novaPosJogadorY, posEspinhoX, posEspinhoY, NUM_OBSTACULOS)) {
-                    posJogadorX = 1; // Reiniciar a posição do jogador
+                    posJogadorX = 1; // Reiniciar a posiÃ§Ã£o do jogador
                     posJogadorY = 1;
                     contadorEspinho++; // Incrementar o contador de toques no espinho
                     if (contadorEspinho == 3) {
                         system("cls");
-                        printf("Tu eh tao pereba que conseguiu morrer 3 vezes, volta pro menu e reinicia colega ");
+                        printf("Tu eh tao pereba que conseguiu morrer 3 vezes, volta pro menu e reinicia colega\n");
                         system("pause");
                         system("cls");
                         break; // Sair do loop e voltar para o menu
                     }
                 } else {
-                    // Atualizar a posição do jogador
+                    // Atualizar a posiÃ§Ã£o do jogador
                     posJogadorX = novaPosJogadorX;
                     posJogadorY = novaPosJogadorY;
                 }
 
-                // Verificar se o jogador está na mesma posição que o caractere "@"
+                // Verificar se o jogador estÃ¡ na mesma posiÃ§Ã£o que o caractere "@"
                 if (mapa[posJogadorX][posJogadorY] == '@') {
-                    mapa[posJogadorX][posJogadorY] = ' '; // Substituir "@" por espaço em branco
+                    mapa[posJogadorX][posJogadorY] = ' '; // Substituir "@" por espaÃ§o em branco
                     passouPorAt = 1; // Atualizar o status indicando que o jogador passou pelo caractere "@"
                 }
 
-                // Verificar se o jogador está na mesma posição que o caractere "="
+                // Verificar se o jogador estÃ¡ na mesma posiÃ§Ã£o que o caractere "="
                 if (mapa[posJogadorX][posJogadorY] == '=') {
                     printf("Fala dele (a), nunca critiquei \n");
                     system("pause");
                     fase3(); // Sair do loop e voltar para o menu
                 }
                 
-                // Verificar se o jogador e o 'X' estão na mesma posição
+                // Verificar se o jogador e o 'X' estÃ£o na mesma posiÃ§Ã£o
                 if (posJogadorX == posX && posJogadorY == posY) {
-                	system("cls") ;
-                	printf("Burrao, game over\n");
-                	system("pause") ;
-					system("cls") ;
-			        // Redefinir as posições iniciais do jogador e do 'X'
+                    printf("Burrao, game over\n");
+			        // Redefinir as posiÃ§Ãµes iniciais do jogador e do 'X'
 			        posJogadorX = 1;
 			        posJogadorY = 1;
 			        mapa[posX][posY] = ' ' ;
 			        posX = 1;
 			        posY = 18;
 			        mapa [1] [18] = 'X' ;
-			        // Outras redefinições necessárias...
+			        // Outras redefiniÃ§Ãµes necessÃ¡rias...
 			    }
 
-                // Verificar se o jogador e o '&' estão na mesma posição
+                // Verificar se o jogador e o '&' estÃ£o na mesma posiÃ§Ã£o
                 if (posJogadorX == 18 && posJogadorY == 1) {
                     printf("Voce foi pego pelo &! Reiniciando a fase...\n");
-			        // Redefinir as posições iniciais do jogador e do 'X'
+			        // Redefinir as posiÃ§Ãµes iniciais do jogador e do 'X'
 			        posJogadorX = 1;
 			        posJogadorY = 1;
 			        posX = 1;
 			        posY = 18;
-			        // Outras redefinições necessárias...
+			        // Outras redefiniÃ§Ãµes necessÃ¡rias...
 			    }
             }
         } 
 
-
-
 void fase3() {
     char mapa[TAMANHO_MAPA3][TAMANHO_MAPA3];
-
-    // Inicializar o mapa com espaços em branco
     for (int i = 0; i < TAMANHO_MAPA3; i++) {
         for (int j = 0; j < TAMANHO_MAPA3; j++) {
             mapa[i][j] = ' ';
         }
     }
 
-    // Adicionar as bordas do mapa
     for (int i = 0; i < TAMANHO_MAPA3; i++) {
         for (int j = 0; j < TAMANHO_MAPA3; j++) {
             if (i == 0 || i == TAMANHO_MAPA3 - 1 || j == 0 || j == TAMANHO_MAPA3 - 1) {
@@ -466,86 +525,249 @@ void fase3() {
         }
     }
 
-    // Adicionar obstáculos, paredes, portas, etc.
-    // Exemplo:
-    mapa[5][5] = '*';  // Paredes
-    mapa[10][20] = '*'; // Paredes
-    mapa[15][30] = 'D'; // Porta
-    mapa[25][10] = '#'; // Obstáculo
-    mapa[1][20] = 'V';
+    #define NUM_POSICOES_PROIBIDAS 80
+    int posicoesProibidasX[NUM_POSICOES_PROIBIDAS] = {1, 8, 21, 9, 20, 24, 19, 27, 2, 3, 21, 2}; // posiÃ§Ãµes proibidas X
+    int posicoesProibidasY[NUM_POSICOES_PROIBIDAS] = {1, 8, 22, 9, 20, 18, 8, 24, 3, 1, 19, 2}; // posiÃ§Ãµes proibidas Y
 
-    // Definir a posição inicial do jogador
-    int posJogadorX = 1; // Escolha a posição inicial em X
-    int posJogadorY = 1; // Escolha a posição inicial em Y
+    int posEspinhoX[NUM_OBSTACULOS_FASE3];
+    int posEspinhoY[NUM_OBSTACULOS_FASE3];
 
-    // Definir a posição inicial do caractere "&"
-    int posAndX = 1; // Escolha a posição inicial em X
-    int posAndY = 1; // Escolha a posição inicial em Y
+    for (int i = 0; i < NUM_OBSTACULOS_FASE3; i++) {
+        int x, y;
+        int posicaoValida;
 
-    // Definir a posição inicial do personagem 'V'
-    int posVX = 1; // Defina a posição inicial do personagem 'V' aqui
-    int posVY = 20; // Defina a posição inicial do personagem 'V' aqui
+        do {
+            posicaoValida = 1;
+            x = rand() % (TAMANHO_MAPA3 - 2) + 1;
+            y = rand() % (TAMANHO_MAPA3 - 2) + 1;
 
-    // Loop principal para movimentação do jogador e interações com o mapa
-    system("cls"); // Limpar a tela antes de imprimir o mapa
-    printf("Fase 3:\n");
+            // Verificar se a posiÃ§Ã£o gerada estÃ¡ nas posiÃ§Ãµes proibidas
+            for (int j = 0; j < NUM_POSICOES_PROIBIDAS; j++) {
+                if (x == posicoesProibidasX[j] && y == posicoesProibidasY[j]) {
+                    posicaoValida = 0;
+                    break;
+                }
+            }
+        } while (!posicaoValida);
+
+        posEspinhoX[i] = x;
+        posEspinhoY[i] = y;
+        mapa[x][y] = '#';
+    }
+
+    int posJogadorX = 1;
+    int posJogadorY = 1;
+    int posX = 8;
+    int posY = 8;
+    int posVx = POSICAO_INICIAL_V_X;
+    int posVy = POSICAO_INICIAL_V_Y;
+    int portal1X = 9;
+    int portal1Y = 9;
+    int portal2X = 20;
+    int portal2Y = 20;
+    mapa[8][8] = 'X';
+    mapa[21][22] = 'O';
+    mapa[2][2] = 'D';
+    mapa[27][24] = '@';
+    mapa[POSICAO_INICIAL_V_X][POSICAO_INICIAL_V_Y] = 'V';
+    mapa[9][9] = '<';
+    mapa[20][20] = '<';
+
+    char movimento;
+    int contadorEspinho = 0;
+    int passouPorAt = 0;
 
     while (1) {
-        // Limpar a tela e exibir o mapa atualizado
+        if (posJogadorX == posX && posJogadorY == posY) {
+            system("cls");
+            printf("De novo KKKKKKKKKKKKKKKK ruinzao\n");
+            system("pause");
+            system("cls");
+            mapa[posX][posY] = ' ';
+            mapa[posVx][posVy] = ' ';
+            posJogadorX = 1;
+            posJogadorY = 1;
+            posX = 8;
+            posY = 8;
+            posVx = POSICAO_INICIAL_V_X;
+            posVy = POSICAO_INICIAL_V_Y;
+            mapa[8][8] = 'X';
+            mapa[POSICAO_INICIAL_V_X][POSICAO_INICIAL_V_Y] = 'V';
+            continue;
+        }
+
         system("cls");
         printf("Fase 3:\n");
         for (int i = 0; i < TAMANHO_MAPA3; i++) {
             for (int j = 0; j < TAMANHO_MAPA3; j++) {
-                printf("%c ", mapa[i][j]);
+                if (i == posJogadorX && j == posJogadorY) {
+                    printf("& ");
+                } else if (i == posX && j == posY) {
+                    printf("X ");
+                } else if (i == posVx && j == posVy) {
+                    printf("V ");
+                } else {
+                    printf("%c ", mapa[i][j]);
+                }
             }
             printf("\n");
         }
 
-        // Capturar o movimento do jogador
-        char movimento;
         scanf(" %c", &movimento);
 
-        // Movimento do caractere "&" baseado na entrada do jogador
-        moverAnd(&posAndX, &posAndY, mapa, movimento);
+        int novaPosJogadorX = posJogadorX;
+        int novaPosJogadorY = posJogadorY;
 
-        // Lógica de movimento do jogador e outras interações...
+        moverAnd(&novaPosJogadorX, &novaPosJogadorY, mapa, movimento);
 
-        // Exemplo: verificar se o jogador e o '&' estão na mesma posição
-        if (posJogadorX == posAndX && posJogadorY == posAndY) {
-            printf("Voce foi pego pelo &! Reiniciando a fase...\n");
-            // Redefinir as posições iniciais do jogador e do '&'
+        if (ehObstaculo(novaPosJogadorX, novaPosJogadorY, posEspinhoX, posEspinhoY, NUM_OBSTACULOS_FASE3)) {
+            printf("Afobou maninho (a), acontece\n");
+            system("pause");
+            system("cls");
+            // Remover os personagens das posiÃ§Ãµes anteriores
+            mapa[posJogadorX][posJogadorY] = ' ';
+            mapa[posX][posY] = ' ';
+            mapa[posVx][posVy] = ' ';
+
+            // Redefinir as posiÃ§Ãµes iniciais
             posJogadorX = 1;
             posJogadorY = 1;
-            posAndX = 1;
-            posAndY = 1;
-            // Outras redefinições necessárias...
+            posX = 8;
+            posY = 8;
+            posVx = POSICAO_INICIAL_V_X;
+            posVy = POSICAO_INICIAL_V_Y;
+
+            // Adicionar os personagens nas novas posiÃ§Ãµes iniciais
+            mapa[posX][posY] = 'X';
+            mapa[posVx][posVy] = 'V';
+            mapa[9][9] = '<';
+            mapa[20][20] = '<';
+            mapa[27][24] = '@';
+
+            for (int i = 0; i < NUM_OBSTACULOS_FASE3; i++) {
+                mapa[posEspinhoX[i]][posEspinhoY[i]] = '#';
+            }
+            if (mapa[posJogadorX][posJogadorY] == '#') {
+                mapa[posJogadorX][posJogadorY] = '&';
+            }
+            contadorEspinho++; // Incrementar o contador de toques no espinho
+            if (contadorEspinho == 3) {
+                system("cls");
+                printf("Tu eh tao pereba que conseguiu morrer 3 vezes, volta pro menu e reinicia colega\n");
+                system("pause");
+                system("cls");
+                break; // Sair do loop e voltar para o menu
+            }
+            continue;
+
         }
+        posJogadorX = novaPosJogadorX;
+        posJogadorY = novaPosJogadorY;
+        moverX3(&posX, &posY, mapa);
+        moverV(&posVx, &posVy, posJogadorX, posJogadorY, mapa, posEspinhoX, posEspinhoY, NUM_OBSTACULOS_FASE3);
 
-        // Movimento do personagem 'V'
-        moverV(&posVX, &posVY, posAndX, posAndY, mapa);
+        if (posJogadorX == portal1X && posJogadorY == portal1Y) {
+            mapa[9][9] = '<';
+            posJogadorX = 20;
+            posJogadorY = 19;
+        } else if (posJogadorX == portal2X && posJogadorY == portal2Y) {
+            mapa[20][20] = '<';
+            posJogadorX = 9;
+            posJogadorY = 8;
+        }
+        if (posJogadorX == 27 && posJogadorY == 24){
+		    printf("Pegaste a chave brother, so nao ser ruim");
+		    mapa[posJogadorX][posJogadorY] = ' '; // Substituir "@" por espaÃ§o em branco
+		    system("pause");
+		    system("cls");
+		    passouPorAt = 1; // Atualizar o status indicando que o jogador passou pelo caractere "@"
+		}
+		// Verificar se o jogador estÃ¡ na mesma posiÃ§Ã£o que o caractere "="
+		if (posJogadorX == 2 && posJogadorY == 2) {
+			system("cls") ;
+		    printf("Parabens! vc zerou o game!\n\n\n");
+	printf(" ____           _   _\n");                   
+	printf("|  _ \    ___  (_) | |_    ___    _   _\n");   
+    printf("| | | |  / _ \ | | | __|  / _ \  | | | |\n");  
+    printf("| |_| | |  __/ | | | |_  | (_) | | |_| |\n"); 
+    printf("|____/   \___| |_|  \__|  \___/   \__,_|_\n");
+    printf("(_)  _ __   _ __ ___     __ _    ___   | |\n");
+    printf("| | | '__| | '_ ` _ \   / _` |  / _ \  | |\n");
+	printf("| | | |    | | | | | | | (_| | | (_) | |_|\n");
+	printf("|_| |_|    |_| |_| |_|  \__,_|  \___/  (_)\n");
+		    system("pause");
+		    system("cls") ;
+		    return; // Retorna ao menu
+		}
 
-        // Verificar se o personagem 'V' e o '&' estão na mesma posição
-        if (posVX == posAndX && posVY == posAndY) {
-        	printf("Egua te arriaram, bora de novo\n");
-            system("pause") ;
-        	system("cls") ;
-            // Redefinir as posições iniciais do jogador e do 'V'
+
+        // Verificar se o jogador pressionou "i" e se ele passou pelo caractere "@"
+        if (movimento == 'i' && passouPorAt == 1) {
+            // Verificar se o jogador estÃ¡ adjacente ao caractere "D" (nas posiÃ§Ãµes 17,2 17,4 16,3 18,3)
+            if ((posJogadorX == 2 || (posJogadorY == 1 || posJogadorY == 2)) || ((posJogadorX == 3 || posJogadorX == 1) || posJogadorY == 3)) {
+                mapa[2][2] = '='; // Trocar o caractere "D" por "="
+            } else {
+                printf("Egua bicho terceiro mapa e tu ainda n sabe que precisa estar do lado pra apertar, pqp\n");
+                system("pause");
+            }
+        }
+		if (novaPosJogadorX == 21 && novaPosJogadorY == 22) {
+                    int opcao;
+                    printf("Quer tocar no butao? (1 para sim, 2 para nao): ");
+                    scanf("%d", &opcao);
+                    if (opcao == 1) {
+                    	system("cls") ;
+                        printf("Quero ver passar agora\n");
+                        system("pause") ;
+            			mapa[9][9] = ' ';
+            			mapa[20][20] = ' ';
+                    } else if (opcao == 2) {
+                        
+                    } else {
+                        printf("Continuando o game");
+                    }
+        }
+        if (posJogadorX == posVx && posJogadorY == posVy) {
+            system("cls");
+            printf("V te arriou, bora de novo\n");
+            system("pause");
+            system("cls");
+			
+            // Remover os caracteres das suas posiÃ§Ãµes atuais
+            mapa[posJogadorX][posJogadorY] = ' ';
+            mapa[posX][posY] = ' ';
+            mapa[posVx][posVy] = ' ';
+
+            // Redefinir as posiÃ§Ãµes iniciais
             posJogadorX = 1;
             posJogadorY = 1;
-            posAndX = 1;
-            posAndY = 1;
-            mapa[posVX] [posVY] = ' ' ;
-            posVX = 1; // Defina a posição inicial do personagem 'V' aqui
-            posVY = 20;
-			mapa [1] [20] = 'V' ;// Defina a posição inicial do personagem 'V' aqui
-			continue ;
-            // Outras redefinições necessárias...
+            posX = 8;
+            posY = 8;
+            posVx = POSICAO_INICIAL_V_X;
+            posVy = POSICAO_INICIAL_V_Y;
+
+            // Adicionar os personagens nas novas posiÃ§Ãµes iniciais
+            mapa[posJogadorX][posJogadorY] = '&';
+            mapa[posX][posY] = 'X';
+            mapa[posVx][posVy] = 'V';
+            mapa[9][9] = '<';
+            mapa[20][20] = '<';
+            mapa[27][24] = '@';
+            mapa[21][22] = 'O';
+            
+
+            for (int i = 0; i < NUM_OBSTACULOS_FASE3; i++) {
+                mapa[posEspinhoX[i]][posEspinhoY[i]] = '#';
+            }
+            if (mapa[posJogadorX][posJogadorY] == '#') {
+                mapa[posJogadorX][posJogadorY] = '&';
         }
 
-        // Lógica de movimento do jogador e outras interações...
+            continue;
+
+        }
     }
 }
-
 
 
 
@@ -556,24 +778,23 @@ int main() {
 
     do {
         printf("Menu:\n");
-        printf("1. Hablar no Mapa 1\n");
-        printf("2. Hablar no Mapa 2\n");
-    	printf("3. Teste monstro nivel 2\n") ;
-        printf("4. Tutorial\n");
-        printf("5. Jogo ir de naninha\n");
+        printf("1. Comessar o show\n");
+        printf("2. Tutorial\n");
+        printf("3. Jogo ir de naninha\n");
 		printf("Escolha: ");
-        scanf("%d", &escolha);
+		scanf("%d", &escolha);
+        
 
         // Limpar o buffer de entrada
         while (getchar() != '\n');
 
         if (escolha == 1) {
             fase1();
-        } else if (escolha == 2) {
+        } else if (escolha == 22) {
         	fase2();
-        } else if (escolha == 3) {
+        } else if (escolha == 33) {
         	fase3();
-		  }else if (escolha == 4) {
+		} else if (escolha == 2) {
             // Tutorial
             printf("=== Tutorial ===\n");
             printf("Use as teclas 'w', 'a', 's', 'd' para mover o boneco.\n");
@@ -587,7 +808,7 @@ int main() {
             system("cls");
 		
         
-		} else if (escolha == 5) {
+		} else if (escolha == 3) {
             printf("zzzzzzzzzzzz....\n");
             break; // Finalizar o loop
        	}else {
