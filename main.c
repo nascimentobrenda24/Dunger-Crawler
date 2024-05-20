@@ -440,7 +440,7 @@ void fase2() {
                     scanf("%d", &opcao);
                     if (opcao == 1) {
                     	system("cls") ;
-                        printf("Se f#deu KKKKKKKKKKKKKKKKKKKKK \n");
+                        printf("Encerraste o programa, parabéns KKKKKKKKK \n");
                         system("pause") ;
                         system("cls") ;
                         exit(0); // Encerrar o programa
