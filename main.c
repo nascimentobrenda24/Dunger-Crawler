@@ -810,7 +810,7 @@ int main() {
 		
         
 		} else if (escolha == 3){
-			printf("\t\t\t\t\t Lore:\n\n\n\nPedrino Casseb, o protagonista, estava tendo um pessimo dia pois estava programando em java e pra melhorar mais ainda, o seu leao azulino conseguiu empatar 0 a 0 com Tombense.\nPra desestressar, ele fez um joguinho de labirinto em c, foi entao que ao levar um sustao com a polyana corrigindo atividade 23:56 ele derruba cafe no pc, acabando por ser sugado pela sua propria criacao.\nAgora, ele deve completar o game para escapar do mesmo\n");
+			printf("\t\t\t\t\t Lore:\n\n\n\nPedrino Casseb, o protagonista, estava tendo um pessimo dia pois estava programando em java e pra melhorar mais ainda, o seu leao azulino conseguiu empatar 0 a 0 com Tombense.\nPra desestressar, ele fez um joguinho de labirinto em c, foi entao que ao levar um sustao com a polyana corrigindo atividade 23:56 ele derruba uma heineken no pc, acabando por ser sugado pela sua propria criacao.\nAgora, ele deve completar o game para escapar do mesmo\n");
 			getchar(); // Limpar o buffer de entrada
             getchar(); // Aguardar pressionar qualquer tecla para continuar
             system("cls");
