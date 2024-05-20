@@ -1,7 +1,8 @@
 #README: Dungeon Crawler
 
 ## Introdução
-"Dungeon Crawler" é um jogo de aventura e puzzle em que o jogador assume o papel do protagonista numa narrativa interativa impulsionada pela exploração e resolução de quebra-cabeças. Inspirado por clássicos do gênero como "Colossal Cave Adventure", este projeto é desenvolvido com o objetivo de aprimorar habilidades como resolução de problemas, raciocínio lógico algorítmico e competência interpessoal. A história do jogo consiste no protagonista Pedro Casseb, que em um dia após muito java e pra melhorar mais ainda o leão azulino empatando 0 a 0 com Tombense. Pra desestressar ele fez um joguinho de labirinto porém acabou preso nele, dessa forma, Pedrinho precisa completar o game para sair dele.
+"Dungeon Crawler" é um jogo de aventura e puzzle em que o jogador assume o papel do protagonista numa narrativa interativa impulsionada pela exploração e resolução de quebra-cabeças. Inspirado por clássicos do gênero como "Colossal Cave Adventure", este projeto é desenvolvido com o objetivo de aprimorar habilidades como resolução de problemas, raciocínio lógico algorítmico e competência interpessoal. A história do jogo passa num dia de extremo estresse do personagem Pedro Casseb após codar o dia todo em java e ver seu azulino empatar contra o Tombense. Querendo desestressar, Pedrinho começa a beber heinekein e decide criar um game de labirinto em C. Era noite de sexta-feira 13, após algumas tantas grades de Heinekein, Casseb acaba sendo teletransportado em para o labirinto que ele mesmo criou em C. Agora, preso no terminal de um windows clássico, Casseb precisa vazar o quanto antes dessa dimensão paralela para sair com a  galera e comer churrasco.
+
 
 ## Objetivo
 Este projeto visa desenvolver e consolidar conhecimentos adquiridos em programação e algoritmos, desafiando os alunos a aplicar essas habilidades na criação de um jogo estruturado em fases com crescente dificuldade.
