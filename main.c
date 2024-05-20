@@ -198,7 +198,7 @@ void fase1() {
         printf("Fase 1:\n");
         for (int i = 0; i < TAMANHO_MAPA; i++) {
             for (int j = 0; j < TAMANHO_MAPA; j++) {
-                printf("%c ", mapa[i][j]);
+                printf(" %c ", mapa[i][j]);
             }
             printf("\n");
         }
@@ -780,7 +780,7 @@ int main() {
         printf("Menu:\n");
         printf("1. Comecar o show\n");
         printf("2. Tutorial\n");
-		printf("3. Lore\n");
+        printf("3. Lore\n");
         printf("4. Jogo ir de naninha\n");
 		printf("Escolha: ");
 		scanf("%d", &escolha);
@@ -810,7 +810,7 @@ int main() {
 		
         
 		} else if (escolha == 3){
-			printf("A historia do jogo consiste no protagonista Pedro Casseb, que em um dia apos muito java e pra melhorar mais ainda o leao azulino empatando 0 a 0 com Tombense.\n\nPra desestressar ele fez um joguinho de labirinto porem acabou preso nele apos derramar cafe com um susto que levou da polyana corrigindo atividade de madrugada.\n\nDessa forma, Pedrinho precisa completar o game para se libertar de sua propria criacao.") ;
+			printf("\t\t\t\t\t Lore:\n\n\n\nPedrino Casseb, o protagonista, estava tendo um pessimo dia pois estava programando em java e pra melhorar mais ainda, o seu leao azulino conseguiu empatar 0 a 0 com Tombense.\nPra desestressar, ele fez um joguinho de labirinto em c, foi entao que ao levar um sustao com a polyana corrigindo atividade 23:56 ele derruba cafe no pc, acabando por ser sugado pela sua propria criacao.\nAgora, ele deve completar o game para escapar do mesmo\n");
 			getchar(); // Limpar o buffer de entrada
             getchar(); // Aguardar pressionar qualquer tecla para continuar
             system("cls");
