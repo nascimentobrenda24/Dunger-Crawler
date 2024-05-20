@@ -694,7 +694,7 @@ void fase3() {
     printf("(_)  _ __   _ __ ___     __ _    ___   | |\n");
     printf("| | | '__| | '_ ` _ \   / _` |  / _ \  | |\n");
 	printf("| | | |    | | | | | | | (_| | | (_) | |_|\n");
-	printf("|_| |_|    |_| |_| |_|  \__,_|  \___/  (_)\n");
+	printf("|_| |_|    |_| |_| |_|  \__,_|  \___/  (_)\n\n");
 		    system("pause");
 		    system("cls") ;
 		    return; // Retorna ao menu
@@ -778,9 +778,10 @@ int main() {
 
     do {
         printf("Menu:\n");
-        printf("1. Comessar o show\n");
+        printf("1. Comecar o show\n");
         printf("2. Tutorial\n");
-        printf("3. Jogo ir de naninha\n");
+		printf("3. Lore\n");
+        printf("4. Jogo ir de naninha\n");
 		printf("Escolha: ");
 		scanf("%d", &escolha);
         
@@ -808,7 +809,12 @@ int main() {
             system("cls");
 		
         
-		} else if (escolha == 3) {
+		} else if (escolha == 3){
+			printf("A historia do jogo consiste no protagonista Pedro Casseb, que em um dia apos muito java e pra melhorar mais ainda o leao azulino empatando 0 a 0 com Tombense.\n\nPra desestressar ele fez um joguinho de labirinto porem acabou preso nele apos derramar cafe com um susto que levou da polyana corrigindo atividade de madrugada.\n\nDessa forma, Pedrinho precisa completar o game para se libertar de sua propria criacao.") ;
+			getchar(); // Limpar o buffer de entrada
+            getchar(); // Aguardar pressionar qualquer tecla para continuar
+            system("cls");
+		}else if (escolha == 4) {
             printf("zzzzzzzzzzzz....\n");
             break; // Finalizar o loop
        	}else {
