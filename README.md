@@ -1,4 +1,4 @@
-                                                  PROJETO DUNGEON CRAWLER
+                                                          PROJETO DUNGEON CRAWLER
 
   Integrantes: 
   
@@ -8,7 +8,7 @@
                
                Fernando Mourão
 
-                                                           LORE:
+                                                                 LORE:
 
 Era uma vez um jovem chamado Pedro Casseb, este estava em um dia tedioso pois tinha passado a tarde inteira mexendo em java, pobre coitado. Foi então que pra melhorar ainda mais sua vida o leão azulino conseguiu empatar em casa 0 a 0 com o Tombense KKKKKKKKKK, ri o narrador, que tá tão fumado quanto o rival.
 
@@ -16,7 +16,7 @@ Como hoje não teve gol do Ribamar, ele resolveu desestressar sua noite brincand
 
 Foi então que o cara foi sugado (Lá ele) pelo próprio jogo que criou, agora ele precisa vencer sua própria criação para escapar.
 
-                                                      HOW TO PLAY:
+                                                               HOW TO PLAY:
 
 Use as teclas 'w', 'a', 's', 'd' para mover o Pedrinho
 
